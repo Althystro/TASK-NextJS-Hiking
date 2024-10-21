@@ -33,6 +33,10 @@ function TripList() {
     router.push(pathname + '?' + createQueryString('difficulty', diff));
   };
 
+  const btnStyle = 'py-2 px-6 border-2 rounded-lg text-lg mx-2 mb-2';
+  const inactiveBtn = 'bg-transparent text-primary border-primary hover:bg-primary hover:text-white ';
+  const activeBtn = 'bg-primarydark text-white border-primarydark';
+
   return (
     <section className="py-24 bg-white" id="portfolio">
       <div className="container mx-auto px-4">
@@ -40,22 +44,13 @@ function TripList() {
         <br />
         <SearchBar setQuery={setQuery} />
         <div className="text-center mt-4">
-          <button
-            className="bg-primary hover:bg-primarydark text-white  py-5 px-6 rounded-lg text-lg mx-2 mb-2"
-            onClick={() => setDifficulty('easy')}
-          >
+          <button className={`${btnStyle} ${difficulty === 'easy' ? activeBtn : inactiveBtn}`} onClick={() => setDifficulty('easy')}>
             Easy
           </button>
-          <button
-            className="bg-primary hover:bg-primarydark text-white  py-5 px-6 rounded-lg text-lg mx-2 mb-2"
-            onClick={() => setDifficulty('moderate')}
-          >
+          <button className={`${btnStyle} ${difficulty === 'moderate' ? activeBtn : inactiveBtn}`} onClick={() => setDifficulty('moderate')}>
             Moderate
           </button>
-          <button
-            className="bg-primary hover:bg-primarydark text-white  py-5 px-6 rounded-lg text-lg mx-2 mb-2"
-            onClick={() => setDifficulty('hard')}
-          >
+          <button className={`${btnStyle} ${difficulty === 'hard' ? activeBtn : inactiveBtn}`} onClick={() => setDifficulty('hard')}>
             Hard
           </button>
         </div>
