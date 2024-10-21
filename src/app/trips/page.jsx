@@ -1,16 +1,37 @@
 'use client';
 
 import trips from '@/data/trips';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 import SearchBar from '@/components/SearchBar';
 import TripCard from '@/components/TripCard';
 
 function TripList() {
   const [query, setQuery] = useState('');
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const searchParams = useSearchParams();
+  const difficulty = searchParams.get('difficulty');
+
   const tripCards = trips
-    .filter((trip) => trip.name.toLowerCase().includes(query.toLowerCase()))
+    .filter((trip) => trip.name.toLowerCase().includes(query.toLowerCase()) && (!difficulty || trip.difficulty === difficulty))
     .map((trip, index) => <TripCard trip={trip} key={index} />);
+
+  const createQueryString = useCallback(
+    (name, value) => {
+      const params = new URLSearchParams(searchParams);
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams]
+  );
+
+  const setDifficulty = (diff) => {
+    router.push(pathname + '?' + createQueryString('difficulty', diff));
+  };
 
   return (
     <section className="py-24 bg-white" id="portfolio">
@@ -19,9 +40,24 @@ function TripList() {
         <br />
         <SearchBar setQuery={setQuery} />
         <div className="text-center mt-4">
-          <button className="bg-primary hover:bg-primarydark text-white  py-5 px-6 rounded-lg text-lg mx-2 mb-2">Easy</button>
-          <button className="bg-primary hover:bg-primarydark text-white  py-5 px-6 rounded-lg text-lg mx-2 mb-2">Moderate</button>
-          <button className="bg-primary hover:bg-primarydark text-white  py-5 px-6 rounded-lg text-lg mx-2 mb-2">Hard</button>
+          <button
+            className="bg-primary hover:bg-primarydark text-white  py-5 px-6 rounded-lg text-lg mx-2 mb-2"
+            onClick={() => setDifficulty('easy')}
+          >
+            Easy
+          </button>
+          <button
+            className="bg-primary hover:bg-primarydark text-white  py-5 px-6 rounded-lg text-lg mx-2 mb-2"
+            onClick={() => setDifficulty('moderate')}
+          >
+            Moderate
+          </button>
+          <button
+            className="bg-primary hover:bg-primarydark text-white  py-5 px-6 rounded-lg text-lg mx-2 mb-2"
+            onClick={() => setDifficulty('hard')}
+          >
+            Hard
+          </button>
         </div>
         <div className="flex justify-center items-center my-8">
           <div className="w-[10%] h-1 rounded bg-secondary"></div>
