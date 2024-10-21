@@ -6,6 +6,7 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 import SearchBar from '@/components/SearchBar';
 import TripCard from '@/components/TripCard';
+import Link from 'next/link';
 
 function TripList() {
   const [query, setQuery] = useState('');
@@ -19,20 +20,6 @@ function TripList() {
     .filter((trip) => trip.name.toLowerCase().includes(query.toLowerCase()) && (!difficulty || trip.difficulty === difficulty))
     .map((trip, index) => <TripCard trip={trip} key={index} />);
 
-  const createQueryString = useCallback(
-    (name, value) => {
-      const params = new URLSearchParams(searchParams);
-      params.set(name, value);
-
-      return params.toString();
-    },
-    [searchParams]
-  );
-
-  const setDifficulty = (diff) => {
-    router.push(pathname + '?' + createQueryString('difficulty', difficulty === diff ? '' : diff));
-  };
-
   const btnStyle = 'py-2 px-6 border-2 rounded-lg text-lg mx-2 mb-2';
   const inactiveBtn = 'bg-transparent text-primary border-primary hover:bg-primary hover:text-white ';
   const activeBtn = 'bg-primarydark text-white border-primarydark';
@@ -44,15 +31,39 @@ function TripList() {
         <br />
         <SearchBar setQuery={setQuery} />
         <div className="text-center mt-4">
-          <button className={`${btnStyle} ${difficulty === 'easy' ? activeBtn : inactiveBtn}`} onClick={() => setDifficulty('easy')}>
+          <Link className={`${btnStyle} ${!difficulty ? activeBtn : inactiveBtn}`} href={'/trips'} scroll={false}>
+            All
+          </Link>
+          <Link
+            className={`${btnStyle} ${difficulty === 'easy' ? activeBtn : inactiveBtn}`}
+            href={{
+              pathname: '/trips',
+              query: { difficulty: 'easy' },
+            }}
+            scroll={false}
+          >
             Easy
-          </button>
-          <button className={`${btnStyle} ${difficulty === 'moderate' ? activeBtn : inactiveBtn}`} onClick={() => setDifficulty('moderate')}>
+          </Link>
+          <Link
+            className={`${btnStyle} ${difficulty === 'moderate' ? activeBtn : inactiveBtn}`}
+            href={{
+              pathname: '/trips',
+              query: { difficulty: 'moderate' },
+            }}
+            scroll={false}
+          >
             Moderate
-          </button>
-          <button className={`${btnStyle} ${difficulty === 'hard' ? activeBtn : inactiveBtn}`} onClick={() => setDifficulty('hard')}>
+          </Link>
+          <Link
+            className={`${btnStyle} ${difficulty === 'hard' ? activeBtn : inactiveBtn}`}
+            href={{
+              pathname: '/trips',
+              query: { difficulty: 'hard' },
+            }}
+            scroll={false}
+          >
             Hard
-          </button>
+          </Link>
         </div>
         <div className="flex justify-center items-center my-8">
           <div className="w-[10%] h-1 rounded bg-secondary"></div>
