@@ -30,7 +30,7 @@ function TripList() {
   );
 
   const setDifficulty = (diff) => {
-    router.push(pathname + '?' + createQueryString('difficulty', diff));
+    router.push(pathname + '?' + createQueryString('difficulty', difficulty === diff ? '' : diff));
   };
 
   const btnStyle = 'py-2 px-6 border-2 rounded-lg text-lg mx-2 mb-2';
